@@ -12,13 +12,14 @@ class App extends Component {
     this.state = {
       newItem: '',
       todolist: [
-        { title: "thuan di choi", isComplete: true, id: 0 },
-        { title: "thuan o nha", isComplete: true, id: 1 },
-        { title: "thuan di hoc", isComplete: false, id: 2 }
+        //{ title: "thuan di choi", isComplete: true, id: 0 },
+        //{ title: "thuan o nha", isComplete: true, id: 1 },
+        //{ title: "thuan di hoc", isComplete: false, id: 2 }
       ],
       idEdit: -1,
       itemEdit: "",
       totalTodos: 0,
+      isList: 'all'
     };
     this.onItemClick = this.onItemClick.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
@@ -30,10 +31,11 @@ class App extends Component {
   onItemClick(index) {
     const { todolist } = this.state;
     todolist[index].isComplete = !todolist[index].isComplete;
-
-    this.setState(todolist)
-
+    this.setState(
+      todolist
+    )
   };
+
   onKeyUp(event) {
     if (event.keyCode === 13) {//enter key
       let text = event.target.value;
@@ -49,6 +51,7 @@ class App extends Component {
           { title: text, isComplete: false, id: v4() },
           ...this.state.todolist,
         ],
+        totalTodos: this.state.todolist.length + 1,
       });
     }
   }
@@ -56,6 +59,7 @@ class App extends Component {
     //khi nguoi dung onKeyup se phai setState lai 
     this.setState({
       newItem: event.target.value
+
     });
   }
   handleDelete(index) {
@@ -63,6 +67,7 @@ class App extends Component {
     todolist.splice(index, 1);
     this.setState({
       todolist,
+      totalTodos: this.state.totalTodos - 1,
     })
   }
   handleEdit(id) {
@@ -81,8 +86,9 @@ class App extends Component {
   }
   onSaveEdit = () => {
     const { todolist, idEdit, itemEdit } = this.state;
+    debugger;
     todolist.map((item) => {
-      if (item.id === idEdit) {
+      if (item.id === idEdit && itemEdit !== "") {
         item.title = itemEdit
       }
       return item;
@@ -92,8 +98,39 @@ class App extends Component {
       todolist,
     })
   }
+  filtersTodo = (todofilters) => {
+    const { todolist } = this.state;
+    let lengthActive = 0;
+    let lengthCompleted = 0;
+    let total = 0;
+    todolist.map((item) => {
+      if (item.isComplete === false) {
+        lengthActive++;
+      } else {
+        lengthCompleted++;
+      }
+    })
+
+    if (todofilters === "all") {
+      total = todolist.length;
+    } else if (todofilters === "active") {
+      total = lengthActive;
+    } else {
+      total = lengthCompleted;
+    }
+
+    // total = todofilters === 'all' ? todolist.length : todofilters === 'active' ? lengthActive : lengthCompleted;
+
+    this.setState({
+      // todolist: todoFilter,
+      isList: todofilters,
+      totalTodos: total,
+
+    })
+  }
   render() {
-    const { todolist, newItem, idEdit, totalTodos } = this.state;
+    const { todolist, newItem, idEdit, totalTodos, isList } = this.state;
+
     return (
       <div className='todoapp'>
         <Header
@@ -110,9 +147,11 @@ class App extends Component {
           value={idEdit}
           onChange={this.onClickEdit}
           onSaveEdit={this.onSaveEdit}
+          isList={isList}
         />
         <Footer
           totalTodos={totalTodos}
+          filtersTodo={this.filtersTodo}
         />
       </div>
 

@@ -27,7 +27,8 @@ class Todo extends Component {
     }
 
 
-    render() {
+    renderList = () => {
+
         const { item, idEdit, value, onChange, onSaveEdit } = this.props;
         let url = checkImg;
         let className = 'TodoList';
@@ -36,38 +37,46 @@ class Todo extends Component {
             className += ' todolist-complete'
         }
         return (
+            <div onClick={this.onClickItem} className={className}>
 
-            <>
-                <div onClick={this.onItemClick} className={className}>
-
-                    <img src={url} alt='#' width={30} height={30} />
-                    {item.id === idEdit ?
-                        <><input type='text'
-                            defaultValue={value}
-                            onChange={onChange}
-                        />
-                            <button onClick={onSaveEdit}>save</button>
-                        </>
-                        :
-                        <span>{item.title}</span>
-                    }
+                <img src={url} alt='#' width={30} height={30} />
+                {item.id === idEdit ?
+                    <><input type='text'
+                        defaultValue={value}
+                        onChange={onChange}
+                    />
+                        <button onClick={onSaveEdit}>save</button>
+                    </>
+                    :
+                    <span>{item.title}</span>
+                }
 
 
-                    <button
-                        onClick={this.handleDeleteTo}
-                        className="delete">
-                        Delete
-                    </button>
-                    <button
-                        onClick={this.handleEditTo}
-                        className="edit">
-                        Edit
-                    </button>
+                <button
+                    onClick={this.handleDeleteTo}
+                    className="delete">
+                    Delete
+                </button>
+                <button
+                    onClick={this.handleEditTo}
+                    className="edit">
+                    Edit
+                </button>
 
-                </div>
-
-            </>
+            </div>
         );
+    }
+
+    render() {
+        const { isList, item } = this.props;
+        if (isList === 'all') {
+            return this.renderList();
+        }
+        if (isList === 'completed') {
+            return item.isComplete === true ? this.renderList() : null;
+        } else {
+            return item.isComplete === false ? this.renderList() : null;
+        }
     }
 }
 export default Todo;

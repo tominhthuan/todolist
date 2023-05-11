@@ -18,6 +18,7 @@ class TodoList extends Component {
             idEdit,
             onChange,
             onSaveEdit,
+            isList,
         } = this.props;
 
 
@@ -29,13 +30,15 @@ class TodoList extends Component {
                             item={item}
                             key={index}
                             onItemClick={onItemClick}
-                            id={item.id}//index={index}
+                            id={item.id}
+                            index={index}
                             handleDeleteTodo={handleDelete}
                             handleEditTodo={handleEdit}
                             idEdit={idEdit}
                             value={item.title}
                             onChange={onChange}
                             onSaveEdit={onSaveEdit}
+                            isList={isList}
                         />
                     )
                 }

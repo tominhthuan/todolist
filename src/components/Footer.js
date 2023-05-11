@@ -7,8 +7,10 @@ class Footer extends Component {
         super();
 
     }
+
     render() {
-        const { totalTodos } = this.props;
+        const { totalTodos, filtersTodo } = this.props;
+
         return (
             <div className="foo-footer">
                 <span className="todo-count">
@@ -17,15 +19,15 @@ class Footer extends Component {
                     <span>items left</span>
                 </span>
                 <ul className="filters">
-                    <li>
+                    <li onClick={() => filtersTodo("all")}>
                         <a className='selected' href="#/">All</a>
                     </li>
                     <span> </span>
-                    <li >
+                    <li onClick={() => filtersTodo("active")}>
                         <a href="#/active">Active</a>
                     </li>
                     <span> </span>
-                    <li>
+                    <li onClick={() => filtersTodo("completed")}>
                         <a href="#/completed">Completed</a>
                     </li>
                 </ul>
